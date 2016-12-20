@@ -1,0 +1,11 @@
+﻿.input-group-addon:hover {
+    cursor: pointer;
+}
+
+.glyphicon-plus-sign:hover {
+    cursor: pointer;
+}
+
+.glyphicon-remove:hover {
+    cursor: pointer;
+}

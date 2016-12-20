@@ -25,16 +25,10 @@
         </form>
 
         <div id="todo-list-container">
-            <article ng-repeat="todo in todoList track by $index">
-                <!--<input type="checkbox" {{todo.IsCompleted ? "checked" : ""}}>-->
-
-                <div class="material-switch pull-right">
-                    <input id="someSwitchOptionSuccess" name="someSwitchOption001" type="checkbox" />
-                    <label for="someSwitchOptionSuccess" class="label-success"></label>
-                </div>
-
+            <article ng-repeat="todo in todoList track by $index" id="todo{{todo.ToDoId}}">
+                <input type="checkbox" ng-checked="{{todo.IsCompleted}}">
                 <p>{{todo.Name}}</p>
-                <input type="button" class="btn btn-danger" value="Delete">
+                <input type="button" class="btn btn-danger" value="Delete" ng-click="deleteTodo($index, todo.ToDoId)">
             </article>
         </div>
     </main>

@@ -10,15 +10,13 @@
             TodoListItems.getAll().then(function (response) {
                 var objectsFromJson = response.data;
 
-                console.log("The received data from cloud: ");
-
                 for (var i = 0; i < objectsFromJson.length; i++) {
                     $scope.todoList.push(objectsFromJson[i]);
-                    console.log(objectsFromJson[i]);
                 }
                     
             }), function () {
-                alert("Something went wrong.");
+                // fix
+                alert("Something went wrong in TodoListItems.getAll function.");
             }
         }
 
@@ -32,9 +30,11 @@
             $scope.isVisiblePopup = false;
         }
 
-        $scope.submitNewTask = function () {
-            console.log("Is completed: " + $scope.isCompleted);
-            console.log("Name: " + $scope.name);
+        $scope.submitNewTodo = function () {
+            // fix
+            var todo = { "ToDoId": 0, "UserId": 0, "IsCompleted": $scope.isCompleted, "Name": $scope.name };
+            $scope.todoList.push(todo);
+            $scope.isVisiblePopup = false;
 
             var data = { "isCompleted": $scope.isCompleted, "Name": $scope.name };
 
@@ -45,12 +45,28 @@
                     headers: { 'Content-Type': 'application/json' }
                 }
             ).then(function (response) {
+                // fix
                 console.log("A new todo item was successfully sent.");
-                console.log(response.data);
-                $scope.todoList.push(response.data);
+                //console.log("Response data from service: ");
+                //console.log(response.data);
             },
                 function () {
-                    console.log("Something went wrong.");
+                    // fix
+                    console.log("SubmitNewTodo(). Something went wrong.");
+                });
+        }
+
+        $scope.deleteTodo = function (index, todoId) {
+            $scope.todoList.splice(index, 1);
+
+            $http.delete('/api/todos/' + todoId)
+            .then(function (response) {
+                // fix
+                console.log("Todo was successfully deleted.");
+            },
+                function () {
+                    // fix
+                    console.log("Something went wrong in deleteTodo function.");
                 });
         }
 
