@@ -39,7 +39,6 @@ namespace DAL.RepositoryImplementations
         {
             Task task = MapperDomainConfiguration.MapperInstance.Map<DalTask, Task>(entity);
             context.Set<Task>().Add(task);
-            context.SaveChanges();
         }
 
         public void Delete(int id)
@@ -47,7 +46,6 @@ namespace DAL.RepositoryImplementations
             Task task = new Task { Id = id };
             context.Set<Task>().Attach(task);
             context.Set<Task>().Remove(task);
-            context.SaveChanges();
         }
 
         public void Update(DalTask entity)

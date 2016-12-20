@@ -1,6 +1,8 @@
-﻿namespace DAL.Repository
+﻿using DAL.DataTransferObject;
+
+namespace DAL.Repository
 {
-    public interface ITaskRepository
+    public interface ITaskRepository : IRepository<DalTask>
     {
 
     }

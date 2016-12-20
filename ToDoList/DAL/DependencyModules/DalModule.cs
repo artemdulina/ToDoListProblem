@@ -12,6 +12,7 @@ namespace DAL.DependencyModules
         {
             Bind<DbContext>().To<ToDoContext>();
             Bind<ITaskRepository>().To<TaskRepository>();
+            Bind<IUnitOfWork>().To<UnitOfWork>();
         }
     }
 }

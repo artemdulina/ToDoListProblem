@@ -1,6 +1,6 @@
 ﻿namespace DAL.DataTransferObject
 {
-    public class DalTask
+    public class DalTask : IEntity
     {
         public int Id { get; set; }
 
