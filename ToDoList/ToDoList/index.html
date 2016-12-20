@@ -1,15 +1,46 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en" ng-app="TodoList">
 <head>
     <title>ToDo list</title>
     <meta charset="utf-8"/>
     
-    <link rel="stylesheet" type="text/css" href="Content/site.css">
-
-    <script src="Scripts/jquery-3.1.1.js" language="javascript"></script>
-    <script src="Scripts/todo.js" language="javascript"></script>
+    <link rel="stylesheet" type="text/css" href="Content/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="Content/style.css">
 </head>
-<body>
+<body ng-controller="TodoListController as list">
+    <h1>To-do list</h1>
+
+    <main>
+        <input type="button" id="create-todo-button" class="btn btn-info" ng-click="showPopup()" value="New todo" />
+
+        <form method="post" id="popup" ng-show="isVisiblePopup" ng-submit="submitNewTodo()">
+            <label for="isCompleted">Is completed:</label>
+            <input type="checkbox" ng-model="isCompleted" />
+
+            <label for="name">Description:</label>
+            <textarea ng-model="name"></textarea>
+
+            <input type="submit" class="btn" value="Submit" />
+            <input type="button" class="btn" value="Close" ng-click="hidePopup()" />
+        </form>
+
+        <div id="todo-list-container">
+            <article ng-repeat="todo in todoList track by $index">
+                <!--<input type="checkbox" {{todo.IsCompleted ? "checked" : ""}}>-->
+
+                <div class="material-switch pull-right">
+                    <input id="someSwitchOptionSuccess" name="someSwitchOption001" type="checkbox" />
+                    <label for="someSwitchOptionSuccess" class="label-success"></label>
+                </div>
+
+                <p>{{todo.Name}}</p>
+                <input type="button" class="btn btn-danger" value="Delete">
+            </article>
+        </div>
+    </main>
+    
+
+    <!--
     <table id="tasks">
         <thead>
             <tr>
@@ -17,7 +48,7 @@
                 <th>Task</th>
                 <th>Actions</th>
             </tr>
-            <!-- The row for creating new items. -->
+
             <tr id="new">
                 <td><input type="checkbox" id="newCompleted" /></td>
                 <td><input type="text" id="newName" /></td>
@@ -28,5 +59,13 @@
             
         </tbody>
     </table>
+    -->
+
+    <script src="Scripts/angular.js"></script>
+    <script src="Scripts/jquery-3.1.1.js"></script>
+    <script src="Scripts/new-html-elements.js"></script>
+    <script src="Scripts/repository.js"></script>
+    <script src="Scripts/customtodo.js"></script>
+    <!--<script src="Scripts/todo.js"></script-->
 </body>
 </html>

@@ -81,14 +81,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\site.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\style.css" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\customtodo.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\new-html-elements.js" />
+    <Content Include="Scripts\repository.js" />
     <Content Include="Scripts\todo.js" />
     <Content Include="Web.config" />
   </ItemGroup>
