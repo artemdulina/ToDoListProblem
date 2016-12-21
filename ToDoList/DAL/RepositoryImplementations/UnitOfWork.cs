@@ -10,7 +10,7 @@ namespace DAL.RepositoryImplementations
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public DbContext Context { get; }
+        public DbContext Context { get; private set; }
         private bool disposed = false;
 
         public UnitOfWork(DbContext context)

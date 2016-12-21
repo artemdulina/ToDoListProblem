@@ -1,5 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http;
+using BLL.Entities;
+using BLL.Services;
+using ToDoList.Configurations;
 using ToDoList.Models;
 using ToDoList.Services;
 
@@ -13,6 +20,14 @@ namespace ToDoList.Controllers
         private readonly ToDoService todoService = new ToDoService();
         private readonly UserService userService = new UserService();
 
+        private ITaskService taskService;
+        private IQueueTask queueTask;
+
+        public ToDosController(ITaskService taskService)
+        {
+            this.taskService = taskService;
+        }
+
         /// <summary>
         /// Returns all todo-items for the current user.
         /// </summary>
@@ -20,7 +35,12 @@ namespace ToDoList.Controllers
         public IList<ToDoItemViewModel> Get()
         {
             var userId = userService.GetOrCreateUser();
-            return todoService.GetItems(userId);
+            IEnumerable<TaskEntity> tasks = taskService.GetByUser(userId);
+
+            IList<ToDoItemViewModel> resultTasks = tasks.Select(task => MapperDomainConfiguration.MapperInstance.
+                Map<TaskEntity, ToDoItemViewModel>(task)).ToList();
+
+            return resultTasks;
         }
 
         /// <summary>
@@ -49,7 +69,12 @@ namespace ToDoList.Controllers
         public void Post(ToDoItemViewModel todo)
         {
             todo.UserId = userService.GetOrCreateUser();
-            todoService.CreateItem(todo);
+
+            TaskEntity toAdd = MapperDomainConfiguration.MapperInstance.Map<ToDoItemViewModel, TaskEntity>(todo);
+
+            //taskService.Create(toAdd);
+            
+            //todoService.CreateItem(todo);
         }
     }
 }

@@ -10,7 +10,6 @@
         /// </value>
         public int ToDoId { get; set; }
 
-
         /// <summary>
         /// Gets or sets the user identifier.
         /// </summary>

@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ToDoList.Models;
 
@@ -63,10 +64,12 @@ namespace ToDoList.Services
         /// Creates a todo. UserId is taken from the model.
         /// </summary>
         /// <param name="item">The todo to create.</param>
-        public void CreateItem(ToDoItemViewModel item)
+        public async Task<object> CreateItem(ToDoItemViewModel item)
         {
-            httpClient.PostAsJsonAsync(serviceApiUrl + CreateUrl, item)
-                .Result.EnsureSuccessStatusCode();
+            HttpResponseMessage response = await httpClient.PostAsJsonAsync(serviceApiUrl + CreateUrl, item);
+            object responseBody = await response.Content.ReadAsAsync<object>();
+
+            return responseBody;
         }
 
         /// <summary>

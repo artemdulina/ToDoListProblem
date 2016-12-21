@@ -2,6 +2,7 @@
 using DAL.Repository;
 using DAL.RepositoryImplementations;
 using Ninject.Modules;
+using Ninject.Web.Common;
 using ORM;
 
 namespace DAL.DependencyModules
@@ -10,9 +11,9 @@ namespace DAL.DependencyModules
     {
         public override void Load()
         {
-            Bind<DbContext>().To<ToDoContext>();
+            Bind<DbContext>().To<ToDoContext>().InRequestScope();
             Bind<ITaskRepository>().To<TaskRepository>();
-            Bind<IUnitOfWork>().To<UnitOfWork>();
+            Bind<IUnitOfWork>().To<UnitOfWork>().InRequestScope();
         }
     }
 }

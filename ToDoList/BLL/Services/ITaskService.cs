@@ -11,6 +11,7 @@ namespace BLL.Services
     {
         TaskEntity Get(int id);
         IEnumerable<TaskEntity> GetAll();
+        IEnumerable<TaskEntity> GetByUser(int id);
         void Create(TaskEntity task);
         void Delete(int id);
         void Update(TaskEntity task);

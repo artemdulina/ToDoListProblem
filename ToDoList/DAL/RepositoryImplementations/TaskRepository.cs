@@ -56,5 +56,14 @@ namespace DAL.RepositoryImplementations
                 .Where(form => form.Id == toDoForm.Id)
                 .Update(updated => toDoForm);
         }
+
+        public IEnumerable<DalTask> GetByUser(int id)
+        {
+            IEnumerable<DalTask> tasks = context.Set<Task>().ToList().Select(form =>
+                MapperDomainConfiguration.MapperInstance.Map<Task, DalTask>(form)
+                ).Where(t => t.UserId == id);
+
+            return tasks;
+        }
     }
 }

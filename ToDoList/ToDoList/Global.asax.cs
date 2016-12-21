@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using ToDoList.Handlers;
 
 namespace ToDoList
 {
@@ -7,6 +8,7 @@ namespace ToDoList
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            //GlobalConfiguration.Configuration.MessageHandlers.Add(new DataLoader());
         }
     }
 }

@@ -54,7 +54,7 @@ namespace ToDoList.Services
             int userId;
 
             // No user cookie or it's damaged
-            if (userCookie == null || !Int32.TryParse(userCookie.Value, out userId))
+            if (userCookie == null || !int.TryParse(userCookie.Value, out userId))
             {
                 userId = CreateUser("Noname: " + Guid.NewGuid());
 

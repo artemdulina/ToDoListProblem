@@ -23,10 +23,16 @@ namespace BLL.ServicesImplementations
             taskRepository = repository;
         }
 
+        public IEnumerable<TaskEntity> GetByUser(int id)
+        {
+            return MapperBusinessConfiguration.MapperInstance.
+                Map<IEnumerable<DalTask>, IEnumerable<TaskEntity>>(taskRepository.GetByUser(id));
+        }
+
         public void Create(TaskEntity test)
         {
-            DalTask testToCreate = MapperBusinessConfiguration.MapperInstance.Map<TaskEntity, DalTask>(test);
-            taskRepository.Create(testToCreate);
+            DalTask taskToCreate = MapperBusinessConfiguration.MapperInstance.Map<TaskEntity, DalTask>(test);
+            taskRepository.Create(taskToCreate);
             uow.Commit();
         }
 
@@ -44,7 +50,7 @@ namespace BLL.ServicesImplementations
         public IEnumerable<TaskEntity> GetAll()
         {
             return MapperBusinessConfiguration.MapperInstance.
-                Map<IEnumerable<DalTask>, IEnumerable<TaskEntity>>(taskRepository.GetAll()); ;
+                Map<IEnumerable<DalTask>, IEnumerable<TaskEntity>>(taskRepository.GetAll());
         }
 
         public TaskEntity Get(int id)
