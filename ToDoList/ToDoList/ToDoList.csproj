@@ -122,11 +122,15 @@
       <DependentUpon>ToDoList.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\glyphicon.css" />
+    <Content Include="Content\interaction.css" />
     <Content Include="Content\style.css" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\customtodo.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />

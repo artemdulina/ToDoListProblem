@@ -8,20 +8,6 @@
 
         function Init() {
 
-            /*var todo1 = { ToDoId: 1, UserId: 19, IsCompleted: false, Name: "Create a pretty button." };
-            todo1.isEdit = false;
-            var todo2 = { ToDoId: 2, UserId: 19, IsCompleted: false, Name: "Do something interesting." };
-            todo2.isEdit = false;
-            var todo3 = { ToDoId: 3, UserId: 19, IsCompleted: false, Name: "Watch the movie." };
-            todo3.isEdit = false;
-            var todo4 = { ToDoId: 4, UserId: 19, IsCompleted: false, Name: "Some text more text." };
-            todo4.isEdit = false;
-
-            $scope.todoList.push(todo1);
-            $scope.todoList.push(todo2);
-            $scope.todoList.push(todo3);
-            $scope.todoList.push(todo4);*/
-
             TodoListItems.getAll().then(function (response) {
                 var objectsFromJson = response.data;
 

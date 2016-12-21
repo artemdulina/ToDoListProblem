@@ -8,6 +8,6 @@ namespace ToDoList.Models
 {
     public interface IQueueTask
     {
-        Task Enqueue(Func<ToDoItemViewModel,Task<object>> taskGenerator);
+        Task<object> Enqueue(Func<ToDoItemViewModel,Task<object>> taskGenerator, ToDoItemViewModel item);
     }
 }

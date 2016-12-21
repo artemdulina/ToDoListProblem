@@ -23,9 +23,10 @@ namespace ToDoList.Controllers
         private ITaskService taskService;
         private IQueueTask queueTask;
 
-        public ToDosController(ITaskService taskService)
+        public ToDosController(ITaskService taskService, IQueueTask queueTask)
         {
             this.taskService = taskService;
+            this.queueTask = queueTask;
         }
 
         /// <summary>
@@ -66,15 +67,15 @@ namespace ToDoList.Controllers
         /// Creates a new todo-item.
         /// </summary>
         /// <param name="todo">The todo-item to create.</param>
-        public void Post(ToDoItemViewModel todo)
+        public async void Post(ToDoItemViewModel todo)
         {
             todo.UserId = userService.GetOrCreateUser();
 
             TaskEntity toAdd = MapperDomainConfiguration.MapperInstance.Map<ToDoItemViewModel, TaskEntity>(todo);
 
-            //taskService.Create(toAdd);
-            
-            //todoService.CreateItem(todo);
+            taskService.Create(toAdd);
+            var added = await queueTask.Enqueue(todoService.CreateItem, todo);
+
         }
     }
 }
