@@ -1,30 +1,55 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en" ng-app="TodoList">
 <head>
     <title>ToDo list</title>
     <meta charset="utf-8" />
 
-    <!--<link rel="stylesheet" type="text/css" href="Styles/site.css">-->
+    <script src="Scripts/angular.js"></script>
+    <script src="Scripts/jquery-3.1.1.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/new-html-elements.js"></script>
+    <script src="Scripts/repository.js"></script>
+    <script src="Scripts/todo.js"></script>
 
-    <script src="Scripts/jquery-3.1.1.min.js" language="javascript"></script>
-    <script src="Scripts/todo.js" language="javascript"></script>
+    <link rel="stylesheet" type="text/css" href="Content/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="Content/glyphicon.css">
+    <link rel="stylesheet" type="text/css" href="Content/interaction.css">
+    <link rel="stylesheet" type="text/css" href="Content/style.css">
 </head>
-<body>
-    <table id="tasks">
-        <thead>
-            <tr>
-                <th>Completed</th>
-                <th>Task</th>
-                <th>Actions</th>
-            </tr>
-            <!-- The row for creating new items. -->
-            <tr id="new">
-                <td><input type='checkbox' id="newCompleted" /></td>
-                <td><input type='text' id="newName" /></td>
-                <td><input type='button' id="newCreate" value='Create' /></td>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+<body ng-controller="TodoListController as list">
+    <main>
+
+        <div class="panel panel-info">
+
+            <div class="panel-heading text-center">
+                <h1>Tasks</h1>
+            </div>
+
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="todo in todoList track by $index">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <input type="checkbox" ng-model="todo.IsCompleted" ng-checked="{{todo.IsCompleted}}" ng-focus="todo.isEdit = true;">
+                            </span>
+                            <textarea class="form-control" ng-class="todo.IsCompleted ? 'strikethrough-text' : 'normal-text'" ng-model="todo.Name" ng-focus="todo.isEdit = true;">{{todo.Name}}</textarea>
+                            <span class="input-group-addon" ng-click="todo.isEdit ? saveChanges($index, todo.ToDoId) : deleteTodo($index, todo.ToDoId)">
+                                <i class="{{todo.isEdit ? 'glyphicon glyphicon-floppy-disk' : 'glyphicon glyphicon-remove'}}"></i>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="text-center">
+                    <span class="glyphicon glyphicon-plus-sign" ng-click="createEmptyTodo()"></span>
+                </div>
+            </div>
+
+            <div class="panel-footer">Created by: <a href="https://github.com/artemdulina" target="_blank">Dulina Artsiom</a> and <a href="https://github.com/ilia-valchenko" target="_blank">Valchanka Ilya</a></div>
+
+        </div>
+
+    </main>
+
 </body>
 </html>

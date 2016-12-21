@@ -1,124 +1,111 @@
-﻿var tasksManager = function () {
+﻿(function () {
+    var todoListModule = angular.module('TodoList', ['Repository']);
 
-    // appends a row to the tasks table.
-    // @parentSelector: selector to append a row to.
-    // @obj: task object to append.
-    var appendRow = function (parentSelector, obj) {
-        var tr = $("<tr data-id='" + obj.ToDoId + "'></tr>");
-        tr.append("<td><input type='checkbox' class='completed' " + (obj.IsCompleted ? "checked" : "") + "/></td>");
-        tr.append("<td class='name' >" + obj.Name + "</td>");
-        tr.append("<td><input type='button' class='delete-button' value='Delete' /></td>");
-        $(parentSelector).append(tr);
-    }
+    todoListModule.controller('TodoListController', ['$scope', '$http', 'TodoListItems', function ($scope, $http, TodoListItems) {
 
-    // adds all tasks as rows (deletes all rows before).
-    // @parentSelector: selector to append a row to.
-    // @tasks: array of tasks to append.
-    var displayTasks = function (parentSelector, tasks) {
-        $(parentSelector).empty();
-        $.each(tasks, function (i, item) {
-            appendRow(parentSelector, item);
-        });
-    };
+        $scope.todoList = [];
+        $scope.isVisiblePopup = false;
 
-    // starts loading tasks from server.
-    // @returns a promise.
-    var loadTasks = function () {
-        return $.getJSON("/api/todos");
-    };
+        function Init() {
 
-    // starts creating a task on the server.
-    // @isCompleted: indicates if new task should be completed.
-    // @name: name of new task.
-    // @return a promise.
-    var createTask = function (isCompleted, name) {
-        return $.post("/api/todos",
-        {
-            IsCompleted: isCompleted,
-            Name: name
-        });
-    };
+            /*var todo1 = { ToDoId: 1, UserId: 19, IsCompleted: false, Name: "Create a pretty button." };
+            todo1.isEdit = false;
+            var todo2 = { ToDoId: 2, UserId: 19, IsCompleted: false, Name: "Do something interesting." };
+            todo2.isEdit = false;
+            var todo3 = { ToDoId: 3, UserId: 19, IsCompleted: false, Name: "Watch the movie." };
+            todo3.isEdit = false;
+            var todo4 = { ToDoId: 4, UserId: 19, IsCompleted: false, Name: "Some text more text." };
+            todo4.isEdit = false;
 
-    // starts updating a task on the server.
-    // @id: id of the task to update.
-    // @isCompleted: indicates if the task should be completed.
-    // @name: name of the task.
-    // @return a promise.
-    var updateTask = function (id, isCompleted, name) {
-        return $.ajax(
-        {
-            url: "/api/todos",
-            type: "PUT",
-            contentType: 'application/json',
-            data: JSON.stringify({
-                ToDoId: id,
-                IsCompleted: isCompleted,
-                Name: name
-            })
-        });
-    };
+            $scope.todoList.push(todo1);
+            $scope.todoList.push(todo2);
+            $scope.todoList.push(todo3);
+            $scope.todoList.push(todo4);*/
 
-    // starts deleting a task on the server.
-    // @taskId: id of the task to delete.
-    // @return a promise.
-    var deleteTask = function (taskId) {
-        return $.ajax({
-            url: "/api/todos/" + taskId,
-            type: 'DELETE'
-        });
-    };
+            TodoListItems.getAll().then(function (response) {
+                var objectsFromJson = response.data;
 
-    // returns public interface of task manager.
-    return {
-        loadTasks: loadTasks,
-        displayTasks: displayTasks,
-        createTask: createTask,
-        deleteTask: deleteTask,
-        updateTask: updateTask
-    };
-}();
+                for (var i = 0; i < objectsFromJson.length; i++) {
+                    $scope.todoList.push(objectsFromJson[i]);
+                    console.log(objectsFromJson[i]);
+                } 
+            }), function () {
+                // remove it
+                alert("Something went wrong in TodoListItems.getAll function.");
+            }
+        }
 
+        Init();
 
-$(function () {
-    // add new task button click handler
-    $("#newCreate").click(function () {
-        var isCompleted = $('#newCompleted')[0].checked;
-        var name = $('#newName')[0].value;
+        $scope.getStatus = function () {
+            console.log("Todo list status:");
+            for (var i = 0; i < $scope.todoList.length; i++)
+                console.log($scope.todoList[i]);
+        }
 
-        tasksManager.createTask(isCompleted, name)
-            .then(tasksManager.loadTasks)
-            .done(function (tasks) {
-                tasksManager.displayTasks("#tasks > tbody", tasks);
-            });
-    });
+        $scope.createEmptyTodo = function () {
+            var todo = { ToDoId: 0, UserId: 0, IsCompleted: false, Name: "" };
+            $scope.todoList.push(todo);
+        }
 
-    // bind update task checkbox click handler
-    $("#tasks > tbody").on('change', '.completed', function () {
-        var tr = $(this).parent().parent();
-        var taskId = tr.attr("data-id");
-        var isCompleted = tr.find('.completed')[0].checked;
-        var name = tr.find('.name').text();
+        $scope.saveChanges = function (index, todoId) {
 
-        tasksManager.updateTask(taskId, isCompleted, name)
-            .then(tasksManager.loadTasks)
-            .done(function (tasks) {
-                tasksManager.displayTasks("#tasks > tbody", tasks);
-            });
-    });
+            var todo = { ToDoId: todoId, UserId: $scope.todoList[index].UserId, IsCompleted: $scope.todoList[index].IsCompleted, Name: $scope.todoList[index].Name };
+            var data = { "ToDoId": todoId, "UserId": $scope.todoList[index].UserId, "IsCompleted": $scope.todoList[index].IsCompleted, "Name": $scope.todoList[index].Name };
+            $scope.todoList[index].isEdit = false;
 
-    // bind delete button click for future rows
-    $('#tasks > tbody').on('click', '.delete-button', function () {
-        var taskId = $(this).parent().parent().attr("data-id");
-        tasksManager.deleteTask(taskId)
-            .then(tasksManager.loadTasks)
-            .done(function (tasks) {
-                tasksManager.displayTasks("#tasks > tbody", tasks);
-            });
-    });
+            if (todo.ToDoId != 0) {
+                $http.put(
+                '/api/todos',
+                JSON.stringify(data),
+                {
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            ).then(function (response) {
+                // remove it
+                console.log("A new todo item was successfully sent.");
+            },
+                function () {
+                    // remove it
+                    console.log("SubmitNewTodo(). Something went wrong.");
+                });
+            }
+            else
+            {
+                //$scope.todoList.push(todo);
 
-    // load all tasks on startup
-    tasksManager.loadTasks()
-        .done(function (tasks) {
-            tasksManager.displayTasks("#tasks > tbody", tasks);
-        });
-});
+                $http.post(
+                '/api/todos',
+                JSON.stringify(data),
+                {
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            ).then(function (response) {
+                // remove it
+                console.log("A new todo item was successfully sent.");
+                $scope.todoList[index].isEdit = false;
+            },
+                function () {
+                    // remove it
+                    console.log("SubmitNewTodo(). Something went wrong.");
+                });
+            }
+        }
+
+        $scope.deleteTodo = function (index, todoId) {
+            $scope.todoList.splice(index, 1);
+
+            $http.delete('/api/todos/' + todoId)
+            .then(function (response) {
+                // remove it
+                console.log("Todo was successfully deleted.");
+            },
+                function () {
+                    // remove it
+                    console.log("Something went wrong in deleteTodo function.");
+                });
+        }
+
+    }]);
+
+})();
